@@ -2,11 +2,16 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const { type } = require('os');
-const util = require('util')
+const util = require('util');
+const writeFileAsync = util.promisify(fs.writeFile);
+const generateMarkdown = require('./utils/generateMarkdown');
 // TODO: Create an array of questions for user input
-const questions = ['What is the title of your project?', 'Please enter a description of your project.', 'Please enter the installation instructions.', 'Enter any usage information for the application.', 'Please designate the contribution guidelines.', 'Enter testing instructions.' ];
-inquirer.prompt([{
- name: 'Project Title',
+const questions =['What is the title of your project?', 'Please enter a description of your project.', 'Please enter the installation instructions.', 'Enter any usage information for the application.', 'Please designate the contribution guidelines.', 'Enter testing instructions.' ];
+
+function askQuestion () {
+
+return inquirer.prompt([{
+ name: 'ProjectTitle',
  type: 'input',
  message: questions[0],
 },{
@@ -14,19 +19,19 @@ inquirer.prompt([{
  type: 'input',
  message: questions[1]
 },{
- name: 'Installation Instructions',
- type: 'input'   ,
+ name: 'InstallIns',
+ type: 'input',
  message: questions[2]
 },{
- name: 'Usage Info',
+ name: 'Usage',
  type: 'input',
  message: questions[3]
 },{
- name: 'Contribution Guidelines',
+ name: 'Contributions',
  type: 'input',
  message: questions[4]
 },{
- name: 'Testing Instructions',
+ name: 'Testing',
  type: 'input',
  message: questions[5]
 },{
@@ -73,33 +78,31 @@ inquirer.prompt([{
  type: 'input',
  message:'Enter your e-mail address'
 },{
- name:'Github Username',
+ name:'Github',
  type:'input',
  message:'Enter your Github username.'
 }
-]);
+])
+};
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, err => {
-        if (err) {
-          return console.log(err);
-        }
-      
-        console.log("Success!")
-    });
-}
 
+
+
+
+// 
 // TODO: Create a function to initialize app
 async function init() {
     try {
-        const responses = await inquirer.prompt(questions);
-        const markdown = generateMarkdown(responses, userInfo);
-        await writeFileAsync('NewREADME.md', markdown);
+        const responses = await askQuestion();
+        const markdown = generateMarkdown(responses);
+        await writeFileAsync('./Generated Content/NewREADME.md', markdown);
+        console.log('File created');
+        
     } catch (error) {
         console.log(error);
     }
-};
+}
 
-// Function call to initialize app
+// // Function call to initialize app
 init();
