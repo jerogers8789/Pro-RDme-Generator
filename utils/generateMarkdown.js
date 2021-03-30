@@ -14,21 +14,22 @@ function renderLicenseSection(license) {}
 function generateMarkdown(responses) {
   return `# ${responses.ProjectTitle}
 
+  ## Description ##
   ${responses.Description}
-
+  ## Installation ##
   ${responses.InstallIns}
-
+  ## Usage Guide ##
   ${responses.Usage}
-
+  ## Contribution Guidelines ##
   ${responses.Contributions}
-
+  ## Testing Instruction ##
   ${responses.Testing}
-
+  ## Licensing ##
   ${responses.Licenses}
+  
+  Email any questions to ${responses.email}
 
-  ${responses.email}
-
-  ${responses.Github}
+  Follow along with all my projects on Github @ ${responses.Github}
 
 `;
 }
